@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/contact")
@@ -31,7 +32,7 @@ public class ContactController {
     }
 
     @DeleteMapping("/{cid}")
-    public ResponseEntity<String> deleteContact(@PathVariable("cid") long cid){
+    public ResponseEntity<String> deleteContact(@PathVariable("cid") UUID cid){
         boolean isDeleted = contactService.deleteContact(cid);
         if(isDeleted){
             return ResponseEntity.ok("Contact deleted successfully");
@@ -41,7 +42,7 @@ public class ContactController {
     }
 
     @GetMapping("/{cid}")
-    public ResponseEntity<Contact> getContact(@PathVariable("cid") long cid){
+    public ResponseEntity<Contact> getContact(@PathVariable("cid") UUID cid){
         return ResponseEntity.ok(contactService.getContact(cid));
     }
 

@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -34,14 +35,14 @@ public class ContactServiceImpl implements ContactService{
     @Override
     public Contact updateContact(Contact contact) {
         Assert.notNull(contact,"Contact can't be null");
-        Assert.notNull(contact.getCid(),"Contact id can't be null");
+        Assert.notNull(contact.getId(),"Contact id can't be null");
         Assert.notNull(contact.getName(),"Name can't be null");
         Assert.notNull(contact.getEmail(),"Email can't be null");
 
-        Optional<Contact> optionalContact = contactRepository.findById(contact.getCid());
+        Optional<Contact> optionalContact = contactRepository.findById(contact.getId());
         if(optionalContact.isPresent()) {
             Contact existingContact = getExistingContact(contact.getMobile()).orElse(null);
-            if(existingContact != null && !existingContact.getCid().equals(contact.getCid())){
+            if(existingContact != null && !existingContact.getId().equals(contact.getId())){
                 log.error("Contact with mobile : {} already exists",contact.getMobile());
                 throw new ContactExistsException("Contact with mobile : "+contact.getMobile()+" already exists");
             }
@@ -49,14 +50,14 @@ public class ContactServiceImpl implements ContactService{
             log.info("Contact with mobile : {} updated successfully", contact.getMobile());
             return savedContact;
         }else{
-            log.error("Contact with id : {} not found",contact.getCid());
-            throw new ContactNotFoundException("Contact with id : "+contact.getCid()+" not found");
+            log.error("Contact with id : {} not found",contact.getId());
+            throw new ContactNotFoundException("Contact with id : "+contact.getId()+" not found");
         }
 
     }
 
     @Override
-    public boolean deleteContact(long cid) {
+    public boolean deleteContact(UUID cid) {
         Assert.notNull(cid,"Contact id can't be null");
         Optional<Contact> optionalContact = contactRepository.findById(cid);
         if(optionalContact.isPresent()){
@@ -70,7 +71,7 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public Contact getContact(long cid) {
+    public Contact getContact(UUID cid) {
         Assert.notNull(cid,"Contact id can't be null");
         Optional<Contact> optionalContact = contactRepository.findById(cid);
         if(optionalContact.isPresent()){

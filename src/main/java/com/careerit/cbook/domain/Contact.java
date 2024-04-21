@@ -1,23 +1,30 @@
 package com.careerit.cbook.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
-@Data
+@Table(name="contact")
 @Entity
-public class Contact {
+@Getter
+@Setter
+public class Contact extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cid;
+    private UUID id;
     private String name;
     private String email;
     private String mobile;
     private String city;
+
+
+    @PrePersist
+    public void onPrePersist(){
+        this.id=UUID.randomUUID();
+        super.onPrePersist();;
+    }
 
 }
