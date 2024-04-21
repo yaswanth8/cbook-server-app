@@ -16,10 +16,6 @@ public class ContactController {
 
     private final ContactService contactService;
 
-    @GetMapping("/greet")
-    public ResponseEntity<String> greetings(){
-        return ResponseEntity.ok("Welcome to contact application");
-    }
 
     @PostMapping
     public ResponseEntity<Contact> addContact(@RequestBody Contact contact){
@@ -54,6 +50,13 @@ public class ContactController {
     @GetMapping("/search")
     public ResponseEntity<List<Contact>> search(@RequestParam("str") String str){
         return ResponseEntity.ok(contactService.search(str));
+    }
+
+
+    @GetMapping("/greet")
+    public String greet(){
+        return " Welcome to contact Application";
+
     }
 
 }
