@@ -1,7 +1,13 @@
 package com.careerit.cbook.service;
 
+import com.careerit.cbook.dao.AddressRepository;
 import com.careerit.cbook.dao.ContactRepository;
+import com.careerit.cbook.domain.Address;
 import com.careerit.cbook.domain.Contact;
+import com.careerit.cbook.dto.AddressDto;
+import com.careerit.cbook.dto.ContactDto;
+import com.careerit.cbook.util.ConvertorUtil;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,19 +24,37 @@ import java.util.UUID;
 public class ContactServiceImpl implements ContactService{
 
     private final ContactRepository contactRepository;
+    private final AddressRepository addressRepository;
     @Override
-    public Contact addContact(Contact contact) {
-        Assert.notNull(contact,"Contact can't be null");
-        Assert.notNull(contact.getName(),"Name can't be null");
-        Assert.notNull(contact.getEmail(),"Email can't be null");
-        Assert.notNull(contact.getMobile(),"Mobile can't be null");
-        if(getExistingContact(contact.getMobile()).isPresent()){
-            log.error("Contact with mobile : {} already exists",contact.getMobile());
-            throw new ContactExistsException("Contact with mobile : "+contact.getMobile()+" already exists");
+    @Transactional
+    public ContactDto addContact(ContactDto contactDto) {
+        Assert.notNull(contactDto,"Contact can't be null");
+        Assert.notNull(contactDto.getName(),"Name can't be null");
+        Assert.notNull(contactDto.getEmail(),"Email can't be null");
+        Assert.notNull(contactDto.getMobile(),"Mobile can't be null");
+        if(getExistingContact(contactDto.getMobile()).isPresent()){
+            log.error("Contact with mobile : {} already exists",contactDto.getMobile());
+            throw new ContactExistsException("Contact with mobile : "+contactDto.getMobile()+" already exists");
         }
-        Contact savedContact = contactRepository.save(contact);
-        log.info("Contact with mobile : {} saved successfully",contact.getMobile());
-        return savedContact;
+        AddressDto addressDto = contactDto.getAddress();
+        if(addressDto != null){
+            Address address = new Address();
+            address.setCity(addressDto.getCity());
+            address.setState(addressDto.getState());
+            address.setCountry(addressDto.getCountry());
+            address.setZipCode(addressDto.getZipCode());
+            address = addressRepository.save(address);
+            addressDto.setId(address.getId());
+            Contact contact = new Contact();
+            contact.setName(contactDto.getName());
+            contact.setEmail(contactDto.getEmail());
+            contact.setMobile(contactDto.getMobile());
+            contact.setAddress(address);
+            contact = contactRepository.save(contact);
+            contactDto.setId(contact.getId());
+            log.info("Contact with id : {} and mobile : {} added successfully",contact.getId(), contact.getMobile());
+        }
+        return contactDto;
     }
     @Override
     public Contact updateContact(Contact contact) {
@@ -71,11 +95,14 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public Contact getContact(UUID cid) {
+    public ContactDto getContact(UUID cid) {
         Assert.notNull(cid,"Contact id can't be null");
         Optional<Contact> optionalContact = contactRepository.findById(cid);
         if(optionalContact.isPresent()){
-            return optionalContact.get();
+            Contact contact = optionalContact.get();
+            ContactDto contactDto = ConvertorUtil.domainToDto(contact,ContactDto.class);
+            log.info("Contact with id : {} found",cid);
+            return contactDto;
         }else{
             log.error("Contact with id : {} not found",cid);
             throw new ContactNotFoundException("Contact with id : "+cid+" not found");

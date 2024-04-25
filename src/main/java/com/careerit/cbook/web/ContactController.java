@@ -1,6 +1,7 @@
 package com.careerit.cbook.web;
 
 import com.careerit.cbook.domain.Contact;
+import com.careerit.cbook.dto.ContactDto;
 import com.careerit.cbook.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ContactController {
 
 
     @PostMapping
-    public ResponseEntity<Contact> addContact(@RequestBody Contact contact){
+    public ResponseEntity<ContactDto> addContact(@RequestBody ContactDto contact){
         return ResponseEntity.ok(contactService.addContact(contact));
     }
 
@@ -38,7 +39,7 @@ public class ContactController {
     }
 
     @GetMapping("/{cid}")
-    public ResponseEntity<Contact> getContact(@PathVariable("cid") UUID cid){
+    public ResponseEntity<ContactDto> getContact(@PathVariable("cid") UUID cid){
         return ResponseEntity.ok(contactService.getContact(cid));
     }
 

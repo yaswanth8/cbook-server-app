@@ -18,7 +18,10 @@ public class Contact extends BaseEntity{
     private String name;
     private String email;
     private String mobile;
-    private String city;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="address_id")
+    private Address address;
 
 
     @PrePersist

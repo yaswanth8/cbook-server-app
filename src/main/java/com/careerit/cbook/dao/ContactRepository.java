@@ -16,7 +16,7 @@ public interface ContactRepository extends JpaRepository<Contact,UUID> {
     @Query("select c from Contact c where c.mobile = :mobile and c.deleted = false")
     Optional<Contact> findByMobile(@Param("mobile") String mobile);
 
-    @Query("select c from Contact c where c.name like %:str% or c.email like %:str% or c.mobile like %:str% or c.city like %:str% and deleted = false")
+    @Query("select c from Contact c where c.name like %:str% or c.email like %:str% or c.mobile like %:str% and deleted = false")
     List<Contact> search(@Param("str") String str);
 
     @Query("select c from Contact c where c.deleted = false")
