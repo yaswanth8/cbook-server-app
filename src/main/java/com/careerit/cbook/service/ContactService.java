@@ -9,11 +9,11 @@ import java.util.UUID;
 public interface ContactService {
 
 
-     ContactDto addContact(ContactDto contact);
-     Contact updateContact(Contact contact);
+     ContactDto addContact(ContactDto contactDto);
+     ContactDto updateContact(ContactDto contactDto);
      boolean deleteContact(UUID cid);
      ContactDto getContact(UUID cid);
-     List<Contact> getContacts();
-     List<Contact> search(String str);
+     List<ContactDto> getContacts();
+     List<ContactDto> search(String str);
 
 }

@@ -19,13 +19,13 @@ public class ContactController {
 
 
     @PostMapping
-    public ResponseEntity<ContactDto> addContact(@RequestBody ContactDto contact){
-        return ResponseEntity.ok(contactService.addContact(contact));
+    public ResponseEntity<ContactDto> addContact(@RequestBody ContactDto contactDto){
+        return ResponseEntity.ok(contactService.addContact(contactDto));
     }
 
     @PutMapping
-    public ResponseEntity<Contact> updateContact(@RequestBody Contact contact){
-        return ResponseEntity.ok(contactService.updateContact(contact));
+    public ResponseEntity<ContactDto> updateContact(@RequestBody ContactDto contactDto){
+        return ResponseEntity.ok(contactService.updateContact(contactDto));
     }
 
     @DeleteMapping("/{cid}")
@@ -44,12 +44,12 @@ public class ContactController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Contact>> getContacts(){
+    public ResponseEntity<List<ContactDto>> getContacts(){
         return ResponseEntity.ok(contactService.getContacts());
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Contact>> search(@RequestParam("str") String str){
+    public ResponseEntity<List<ContactDto>> search(@RequestParam("str") String str){
         return ResponseEntity.ok(contactService.search(str));
     }
 

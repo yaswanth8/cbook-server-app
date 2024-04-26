@@ -37,45 +37,45 @@ public class ContactServiceImpl implements ContactService{
             throw new ContactExistsException("Contact with mobile : "+contactDto.getMobile()+" already exists");
         }
         AddressDto addressDto = contactDto.getAddress();
+        Contact contact = ConvertorUtil.dtoToDomain(contactDto,Contact.class);
         if(addressDto != null){
-            Address address = new Address();
-            address.setCity(addressDto.getCity());
-            address.setState(addressDto.getState());
-            address.setCountry(addressDto.getCountry());
-            address.setZipCode(addressDto.getZipCode());
+            Address address = ConvertorUtil.dtoToDomain(addressDto,Address.class);
             address = addressRepository.save(address);
-            addressDto.setId(address.getId());
-            Contact contact = new Contact();
-            contact.setName(contactDto.getName());
-            contact.setEmail(contactDto.getEmail());
-            contact.setMobile(contactDto.getMobile());
             contact.setAddress(address);
             contact = contactRepository.save(contact);
-            contactDto.setId(contact.getId());
             log.info("Contact with id : {} and mobile : {} added successfully",contact.getId(), contact.getMobile());
         }
-        return contactDto;
+        return ConvertorUtil.domainToDto(contact,ContactDto.class);
     }
     @Override
-    public Contact updateContact(Contact contact) {
-        Assert.notNull(contact,"Contact can't be null");
-        Assert.notNull(contact.getId(),"Contact id can't be null");
-        Assert.notNull(contact.getName(),"Name can't be null");
-        Assert.notNull(contact.getEmail(),"Email can't be null");
+    public ContactDto updateContact(ContactDto contactDto) {
+        Assert.notNull(contactDto,"Contact can't be null");
+        Assert.notNull(contactDto.getId(),"Contact id can't be null");
+        Assert.notNull(contactDto.getName(),"Name can't be null");
+        Assert.notNull(contactDto.getEmail(),"Email can't be null");
 
-        Optional<Contact> optionalContact = contactRepository.findById(contact.getId());
+        Optional<Contact> optionalContact = contactRepository.findById(contactDto.getId());
         if(optionalContact.isPresent()) {
-            Contact existingContact = getExistingContact(contact.getMobile()).orElse(null);
-            if(existingContact != null && !existingContact.getId().equals(contact.getId())){
-                log.error("Contact with mobile : {} already exists",contact.getMobile());
-                throw new ContactExistsException("Contact with mobile : "+contact.getMobile()+" already exists");
+            Contact existingContact = getExistingContact(contactDto.getMobile()).orElse(null);
+            if(existingContact != null && !existingContact.getId().equals(contactDto.getId())){
+                log.error("Contact with mobile : {} already exists",contactDto.getMobile());
+                throw new ContactExistsException("Contact with mobile : "+contactDto.getMobile()+" already exists");
+            }
+            Contact contact=ConvertorUtil.dtoToDomain(contactDto,Contact.class);
+            AddressDto addressDto=contactDto.getAddress();
+            if(addressDto != null){
+                Address address = ConvertorUtil.dtoToDomain(addressDto,Address.class);
+                address = addressRepository.save(address);
+                contact.setAddress(address);
             }
             Contact savedContact = contactRepository.save(contact);
-            log.info("Contact with mobile : {} updated successfully", contact.getMobile());
-            return savedContact;
+            ContactDto updatedContactDto = ConvertorUtil.domainToDto(savedContact,ContactDto.class);
+            log.info("Contact with id : {} is updated successfully", updatedContactDto.getId());
+            return updatedContactDto;
+
         }else{
-            log.error("Contact with id : {} not found",contact.getId());
-            throw new ContactNotFoundException("Contact with id : "+contact.getId()+" not found");
+            log.error("Contact with id : {} not found",contactDto.getId());
+            throw new ContactNotFoundException("Contact with id : "+contactDto.getId()+" not found");
         }
 
     }
@@ -110,19 +110,20 @@ public class ContactServiceImpl implements ContactService{
     }
 
     @Override
-    public List<Contact> getContacts() {
+    public List<ContactDto> getContacts() {
         List<Contact> contacts =  contactRepository.findAll();
         log.info("Total contacts found : {}",contacts.size());
-        return contacts;
+        return contacts.stream().map(contact -> ConvertorUtil.domainToDto(contact,ContactDto.class)).toList();
+
     }
 
 
     @Override
-    public List<Contact> search(String str) {
+    public List<ContactDto> search(String str) {
         log.info("Searching for : {}",str);
         List<Contact> contacts =  contactRepository.search(str);
         log.info("For given search string : {} found : {}",str,contacts.size());
-        return contacts;
+        return contacts.stream().map(contact -> ConvertorUtil.domainToDto(contact,ContactDto.class)).toList();
     }
 
 

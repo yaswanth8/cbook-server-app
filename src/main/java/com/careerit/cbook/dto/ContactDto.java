@@ -15,4 +15,5 @@ public class ContactDto extends BaseEntityDto {
     private String email;
     private String mobile;
     private AddressDto address;
+
 }
