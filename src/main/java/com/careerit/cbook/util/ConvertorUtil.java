@@ -1,7 +1,6 @@
 package com.careerit.cbook.util;
 
-import com.careerit.cbook.domain.Contact;
-import com.careerit.cbook.dto.ContactDto;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 

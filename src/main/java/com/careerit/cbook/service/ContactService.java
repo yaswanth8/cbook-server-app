@@ -1,6 +1,6 @@
 package com.careerit.cbook.service;
 
-import com.careerit.cbook.domain.Contact;
+
 import com.careerit.cbook.dto.ContactDto;
 
 import java.util.List;

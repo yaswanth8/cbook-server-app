@@ -1,6 +1,6 @@
 package com.careerit.cbook.web;
 
-import com.careerit.cbook.domain.Contact;
+
 import com.careerit.cbook.dto.ContactDto;
 import com.careerit.cbook.service.ContactService;
 import lombok.RequiredArgsConstructor;
