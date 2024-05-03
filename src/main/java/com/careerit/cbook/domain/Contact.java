@@ -24,6 +24,7 @@ public class Contact extends BaseEntity{
 
 
     @PrePersist
+    @Override
     public void onPrePersist(){
         this.id=UUID.randomUUID();
         super.onPrePersist();;

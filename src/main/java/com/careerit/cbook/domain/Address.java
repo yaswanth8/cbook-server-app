@@ -26,6 +26,7 @@ public class Address extends BaseEntity{
     private String zipCode;
 
     @PrePersist
+    @Override
     public void onPrePersist() {
         this.id = UUID.randomUUID();
         super.onPrePersist();

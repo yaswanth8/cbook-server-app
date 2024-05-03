@@ -23,12 +23,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ContactServiceImpl implements ContactService{
 
+    public static final String CONTACT_CAN_T_BE_NULL ="Contact can't be null";
+    public static final String CONTACT_ID_CAN_T_BE_NULL = "Contact id can't be null";
+    public static final String CONTACT_WITH_ID_NOT_FOUND = "Contact with id : {} not found";
     private final ContactRepository contactRepository;
     private final AddressRepository addressRepository;
     @Override
     @Transactional
     public ContactDto addContact(ContactDto contactDto) {
-        Assert.notNull(contactDto,"Contact can't be null");
+        Assert.notNull(contactDto,CONTACT_CAN_T_BE_NULL);
         Assert.notNull(contactDto.getName(),"Name can't be null");
         Assert.notNull(contactDto.getEmail(),"Email can't be null");
         Assert.notNull(contactDto.getMobile(),"Mobile can't be null");
@@ -49,8 +52,8 @@ public class ContactServiceImpl implements ContactService{
     }
     @Override
     public ContactDto updateContact(ContactDto contactDto) {
-        Assert.notNull(contactDto,"Contact can't be null");
-        Assert.notNull(contactDto.getId(),"Contact id can't be null");
+        Assert.notNull(contactDto,CONTACT_CAN_T_BE_NULL);
+        Assert.notNull(contactDto.getId(), CONTACT_ID_CAN_T_BE_NULL);
         Assert.notNull(contactDto.getName(),"Name can't be null");
         Assert.notNull(contactDto.getEmail(),"Email can't be null");
 
@@ -74,7 +77,7 @@ public class ContactServiceImpl implements ContactService{
             return updatedContactDto;
 
         }else{
-            log.error("Contact with id : {} not found",contactDto.getId());
+            log.error(CONTACT_WITH_ID_NOT_FOUND,contactDto.getId());
             throw new ContactNotFoundException("Contact with id : "+contactDto.getId()+" not found");
         }
 
@@ -82,21 +85,21 @@ public class ContactServiceImpl implements ContactService{
 
     @Override
     public boolean deleteContact(UUID cid) {
-        Assert.notNull(cid,"Contact id can't be null");
+        Assert.notNull(cid,CONTACT_ID_CAN_T_BE_NULL);
         Optional<Contact> optionalContact = contactRepository.findById(cid);
         if(optionalContact.isPresent()){
             contactRepository.deleteById(cid);
             log.info("Contact with id : {} deleted successfully",cid);
             return true;
         }else{
-            log.error("Contact with id : {} not found",cid);
+            log.error(CONTACT_WITH_ID_NOT_FOUND,cid);
             throw new ContactNotFoundException("Contact with id : "+cid+" not found");
         }
     }
 
     @Override
     public ContactDto getContact(UUID cid) {
-        Assert.notNull(cid,"Contact id can't be null");
+        Assert.notNull(cid,CONTACT_ID_CAN_T_BE_NULL);
         Optional<Contact> optionalContact = contactRepository.findById(cid);
         if(optionalContact.isPresent()){
             Contact contact = optionalContact.get();
@@ -104,7 +107,7 @@ public class ContactServiceImpl implements ContactService{
             log.info("Contact with id : {} found",cid);
             return contactDto;
         }else{
-            log.error("Contact with id : {} not found",cid);
+            log.error(CONTACT_WITH_ID_NOT_FOUND,cid);
             throw new ContactNotFoundException("Contact with id : "+cid+" not found");
         }
     }

@@ -4,7 +4,12 @@ package com.careerit.cbook.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public class ConvertorUtil {
+public final class ConvertorUtil {
+
+    private ConvertorUtil (){
+
+    }
+
 
     public static <T> T dtoToDomain(Object dto, Class<T> clazz) {
         ObjectMapper mapper = getObjectMapper();
