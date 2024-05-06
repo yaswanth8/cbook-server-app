@@ -14,7 +14,7 @@ public class AppRequestService {
     @Scheduled(cron = "0 */3 * ? * *")
     public void makeRestApiCall(){
         RestTemplate restTemplate = new RestTemplate();
-        String response = restTemplate.getForObject("https://cbook-server-app-usci.onrender.com/api/contact/greet", String.class);
+        String response = restTemplate.getForObject("https://cbook-server-app-usci.onrender.com/", String.class);
         log.info("Response : {}",response);
     }
 }
