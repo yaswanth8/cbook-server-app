@@ -6,6 +6,7 @@ import com.careerit.cbook.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +46,8 @@ public class ContactController {
 
     @GetMapping("/all")
     public ResponseEntity<List<ContactDto>> getContacts(){
+        // Get Username from security context
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return ResponseEntity.ok(contactService.getContacts());
     }
 

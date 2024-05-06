@@ -1,12 +1,11 @@
 package com.careerit.cbook.domain;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
+
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.UUID;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +14,9 @@ import java.time.LocalDateTime;
 @Setter
 public class BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private boolean deleted;
     @Column(name="created_date",updatable = false,nullable = false)
     private LocalDateTime createdDate;

@@ -1,5 +1,6 @@
 package com.careerit.cbook.service;
 
+import com.careerit.cbook.auth.domain.AppUser;
 import com.careerit.cbook.dao.AddressRepository;
 import com.careerit.cbook.dao.ContactRepository;
 import com.careerit.cbook.domain.Address;
@@ -7,6 +8,7 @@ import com.careerit.cbook.domain.Contact;
 import com.careerit.cbook.dto.AddressDto;
 import com.careerit.cbook.dto.ContactDto;
 import com.careerit.cbook.util.ConvertorUtil;
+import com.careerit.cbook.util.SecurityContextUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +44,8 @@ public class ContactServiceImpl implements ContactService{
         AddressDto addressDto = contactDto.getAddress();
         Contact contact = ConvertorUtil.dtoToDomain(contactDto,Contact.class);
         if(addressDto != null){
+            AppUser appUser= SecurityContextUtil.getLoginUser();
+            contact.setUserId(appUser.getId());
             Address address = ConvertorUtil.dtoToDomain(addressDto,Address.class);
             address = addressRepository.save(address);
             contact.setAddress(address);

@@ -14,8 +14,7 @@ import java.util.UUID;
 @Entity(name="contact_address")
 public class Address extends BaseEntity{
 
-    @Id
-    private UUID id;
+
     @Column(name="city")
     private String city;
     @Column(name = "state")
@@ -25,10 +24,10 @@ public class Address extends BaseEntity{
     @Column(name = "zip_code")
     private String zipCode;
 
-    @PrePersist
+    /*@PrePersist
     @Override
     public void onPrePersist() {
-        this.id = UUID.randomUUID();
+
         super.onPrePersist();
-    }
+    }*/
 }

@@ -12,22 +12,22 @@ import java.util.UUID;
 @Setter
 public class Contact extends BaseEntity{
 
-    @Id
-    private UUID id;
+
     private String name;
     private String email;
     private String mobile;
+    private UUID userId;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="address_id")
     private Address address;
 
 
-    @PrePersist
+   /* @PrePersist
     @Override
     public void onPrePersist(){
-        this.id=UUID.randomUUID();
+
         super.onPrePersist();;
-    }
+    }*/
 
 }
