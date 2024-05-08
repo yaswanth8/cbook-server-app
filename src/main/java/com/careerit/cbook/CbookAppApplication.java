@@ -22,6 +22,7 @@ public class CbookAppApplication {
 	private EmailService emailService;
 
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(CbookAppApplication.class, args);
 	}
