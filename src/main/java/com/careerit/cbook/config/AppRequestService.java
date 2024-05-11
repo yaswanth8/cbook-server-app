@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class AppRequestService {
 
-   // @Scheduled(cron = "0 */3 * ? * *")
+    @Scheduled(cron = "0 */3 * ? * *")
     public void makeRestApiCall(){
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.getForObject("https://cbook-server-app-usci.onrender.com/", String.class);
